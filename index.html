@@ -1,0 +1,296 @@
+<!-- Awal kode HTML -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment ALIZZ HOST</title>
+  <style>
+    :root {
+      --primary-color: #00ffe0;
+      --background-dark: #0a0f2c;
+      --card-bg: #111631;
+      --border-glow: 0 0 15px var(--primary-color);
+      --button-color: #00ffb3;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #0a0f2c, #000);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: var(--border-glow);
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+      border: 1px solid #00ffe0;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-color);
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+
+    .language-select {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .language-select select {
+      padding: 6px 12px;
+      background-color: #191d3a;
+      color: white;
+      border: 1px solid var(--primary-color);
+      border-radius: 6px;
+    }
+
+    .main-title {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .main-title span {
+      color: var(--primary-color);
+    }
+
+    .payment-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .tab-button {
+      padding: 8px 18px;
+      background-color: transparent;
+      border: 2px solid var(--primary-color);
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .tab-button.active,
+    .tab-button:hover {
+      background-color: var(--primary-color);
+      color: #000;
+    }
+
+    .payment-content {
+      padding: 15px 0;
+      border-top: 1px solid var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .whatsapp-button {
+      display: inline-block;
+      background-color: var(--button-color);
+      color: black;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 0 10px var(--button-color);
+    }
+
+    img.qris-img {
+      width: 100%;
+      max-width: 180px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .glow {
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="https://files.catbox.moe/5jxdq5.jpg" alt="Avatar" class="avatar" />
+    <div class="language-select">
+      <select id="languageToggle">
+        <option value="id">🇮🇩 Indonesia</option>
+        <option value="en">🇺🇸 English</option>
+      </select>
+    </div>
+
+    <h1 class="main-title">Payment <span>ALIZZ HOST</span>🦅</h1>
+
+    <div class="payment-tabs">
+      <button class="tab-button" data-method="dana">DANA</button>
+      <button class="tab-button" data-method="gopay">GoPay</button>
+      <button class="tab-button" data-method="qris">QRIS</button>
+    </div>
+
+    <div class="payment-content" id="paymentContent">
+      <p id="defaultMessage">Pilih metode pembayaran di atas.</p>
+    </div>
+
+    <p id="afterTransferText">
+      Setelah transfer, mohon kirimkan bukti pembayaran ke <span class="glow">ALIZZ HOST🦅</span> melalui WhatsApp.
+    </p>
+
+    <a href="https://wa.me/6287773020294" class="whatsapp-button" target="_blank" id="whatsappBtn">
+      Hubungi WhatsApp
+    </a>
+  </div>
+
+  <script>
+    const languageToggle = document.getElementById('languageToggle');
+    const defaultMessage = document.getElementById('defaultMessage');
+    const afterTransferText = document.getElementById('afterTransferText');
+    const whatsappBtn = document.getElementById('whatsappBtn');
+    const paymentContent = document.getElementById('paymentContent');
+    const buttons = document.querySelectorAll('.tab-button');
+
+    let lang = 'id';
+
+    const texts = {
+      id: {
+        default: 'Pilih metode pembayaran di atas.',
+        after: 'Setelah transfer, mohon kirimkan bukti pembayaran ke <span class="glow">ALIZZ HOST🦅</span> melalui WhatsApp.',
+        wa: 'Hubungi WhatsApp',
+        gopay: {
+          title: 'GoPay:',
+          number: '6285943502869',
+          name: 'A/n ALIZZ STORE',
+          copy: 'Salin Nomor'
+        },
+        qris: {
+          download: 'Unduh QRIS',
+          desc: 'Toko ALIZZ STORE...',
+          nmid: 'NMID : ID1024359692729',
+          code: 'AO1',
+          tagline: 'SATU QRIS UNTUK SEMUA'
+        },
+        dana: {
+          title: 'DANA:',
+          number: '6285943502869',
+          name: 'A/n ALIZZ STORE',
+          copy: 'Salin Nomor'
+        }
+      },
+      en: {
+        default: 'Choose payment method above.',
+        after: 'After transfer, please send proof of payment to <span class="glow">ALIZZ HOST🦅</span> via WhatsApp.',
+        wa: 'Contact WhatsApp',
+        gopay: {
+          title: 'GoPay:',
+          number: '6285943502869',
+          name: 'A/n ALIZZ STORE',
+          copy: 'Copy Number'
+        },
+        qris: {
+          download: 'Download QRIS',
+          desc: 'ALIZZ STORE Shop...',
+          nmid: 'NMID: ID1024359692729',
+          code: 'AO1',
+          tagline: 'ONE QRIS FOR ALL'
+        },
+        dana: {
+          title: 'DANA:',
+          number: '6285943502869',
+          name: 'A/n ALIZZ STORE',
+          copy: 'Copy Number'
+        }
+      }
+    };
+
+    function updateLanguage() {
+      const t = texts[lang];
+      defaultMessage.innerHTML = t.default;
+      afterTransferText.innerHTML = t.after;
+      whatsappBtn.textContent = t.wa;
+    }
+
+    languageToggle.addEventListener('change', (e) => {
+      lang = e.target.value;
+      updateLanguage();
+    });
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const method = btn.dataset.method;
+        renderContent(method);
+      });
+    });
+
+    function renderContent(method) {
+      const t = texts[lang];
+      if (method === 'gopay') {
+        paymentContent.innerHTML = `
+          <p><strong>${t.gopay.title}</strong></p>
+          <p id="gopayNumber" class="glow">${t.gopay.number}</p>
+          <p>${t.gopay.name}</p>
+          <button onclick="copyNumber()" class="tab-button">${t.gopay.copy}</button>
+        `;
+      } else if (method === 'dana') {
+        paymentContent.innerHTML = `
+          <p><strong>${t.dana.title}</strong></p>
+          <p id="danaNumber" class="glow">${t.dana.number}</p>
+          <p>${t.dana.name}</p>
+          <button onclick="copyDana()" class="tab-button">${t.dana.copy}</button>
+        `;
+      } else if (method === 'qris') {
+        paymentContent.innerHTML = `
+          <button class="tab-button" onclick="downloadQRIS()">${t.qris.download}</button>
+          <div class="qris-container">
+            <img src="https://files.catbox.moe/hck6ia.jpeg" class="qris-img" />
+            <p>${t.qris.desc}</p>
+            <p>${t.qris.nmid}</p>
+            <p>${t.qris.code}</p>
+            <p><strong>${t.qris.tagline}</strong></p>
+          </div>
+        `;
+      }
+    }
+
+    function copyNumber() {
+      const number = texts[lang].gopay.number;
+      navigator.clipboard.writeText(number)
+        .then(() => alert(lang === 'id' ? "Nomor disalin!" : "Number copied!"))
+        .catch(() => alert(lang === 'id' ? "Gagal menyalin" : "Failed to copy"));
+    }
+
+    function copyDana() {
+      const number = texts[lang].dana.number;
+      navigator.clipboard.writeText(number)
+        .then(() => alert(lang === 'id' ? "Nomor DANA disalin!" : "DANA number copied!"))
+        .catch(() => alert(lang === 'id' ? "Gagal menyalin" : "Failed to copy"));
+    }
+
+    function downloadQRIS() {
+      const imageURL = 'https://files.catbox.moe/hck6ia.jpeg';
+      const fileName = 'qris-alizz.png';
+
+      const link = document.createElement('a');
+      link.href = imageURL;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    updateLanguage(); // Inisialisasi
+  </script>
+</body>
+</html>
